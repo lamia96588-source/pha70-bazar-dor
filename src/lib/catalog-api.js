@@ -114,6 +114,42 @@ function toChange(record) {
   return toNumber(value) ?? 0;
 }
 
+function normalizeMarketPrices(record) {
+  const values = firstDefined(record, [
+    "marketPrices",
+    "market_prices",
+    "pricesByMarket",
+    "prices_by_market",
+    "marketData",
+    "market_data",
+    "markets",
+  ]);
+  if (!Array.isArray(values)) return [];
+
+  return values.map((market, index) => {
+    const name = firstDefined(market, ["market", "marketName", "market_name", "name", "bazaar", "bazar"]);
+    if (!name) return null;
+
+    const minimumPrice = toPrice(firstDefined(market, ["minimumPrice", "minimum_price", "minPrice", "min_price", "min"]), market);
+    const maximumPrice = toPrice(firstDefined(market, ["maximumPrice", "maximum_price", "maxPrice", "max_price", "max"]), market);
+    const averagePrice = toPrice(firstDefined(market, ["averagePrice", "average_price", "avgPrice", "avg_price", "average", "avg"]), market);
+    const listedPrice = toPrice(firstDefined(market, ["price", "currentPrice", "current_price"]), market);
+    const resolvedAverage = averagePrice ?? listedPrice
+      ?? (minimumPrice !== null && maximumPrice !== null ? (minimumPrice + maximumPrice) / 2 : null);
+
+    if (resolvedAverage === null && minimumPrice === null && maximumPrice === null) return null;
+
+    return {
+      id: String(firstDefined(market, ["id", "_id"]) ?? `${name}-${index}`),
+      market: String(name),
+      division: String(firstDefined(market, ["division", "district", "region", "area", "location"]) ?? "—"),
+      minimumPrice: minimumPrice ?? resolvedAverage ?? maximumPrice,
+      maximumPrice: maximumPrice ?? resolvedAverage ?? minimumPrice,
+      averagePrice: resolvedAverage ?? minimumPrice ?? maximumPrice,
+    };
+  }).filter(Boolean);
+}
+
 function categoryFor(value) {
   const candidate = typeof value === "object" && value !== null
     ? firstDefined(value, ["slug", "name", "title", "categoryName"])
@@ -158,6 +194,15 @@ function normalizeProduct(record, index) {
   const identity = firstDefined(record, ["slug", "id", "_id", "productId", "product_id"]);
   const slug = makeSlug(identity ?? name, index);
   const knownProduct = sampleProducts.find((sample) => sample.slug === slug || sample.name === name);
+  const marketPrices = normalizeMarketPrices(record);
+  const minimumPrice = toPrice(firstDefined(record, ["minimumPrice", "minimum_price", "minPrice", "min_price"]), record);
+  const maximumPrice = toPrice(firstDefined(record, ["maximumPrice", "maximum_price", "maxPrice", "max_price"]), record);
+  const averagePrice = toPrice(firstDefined(record, ["averagePrice", "average_price", "avgPrice", "avg_price", "marketAverage", "market_average"]), record);
+  const marketMinimum = marketPrices.length ? Math.min(...marketPrices.map((market) => market.minimumPrice)) : null;
+  const marketMaximum = marketPrices.length ? Math.max(...marketPrices.map((market) => market.maximumPrice)) : null;
+  const marketAverage = marketPrices.length
+    ? marketPrices.reduce((sum, market) => sum + market.averagePrice, 0) / marketPrices.length
+    : null;
 
   return {
     slug,
@@ -167,6 +212,11 @@ function normalizeProduct(record, index) {
     unit: String(firstDefined(record, ["unit", "measurementUnit", "measurement_unit", "priceUnit", "price_unit"]) ?? knownProduct?.unit ?? "কেজি"),
     price,
     change: toChange(record),
+    changeAmount: toNumber(firstDefined(record, ["changeAmount", "change_amount", "priceChangeAmount", "price_change_amount", "priceDifference", "price_difference"])),
+    minimumPrice: minimumPrice ?? marketMinimum ?? price,
+    maximumPrice: maximumPrice ?? marketMaximum ?? price,
+    averagePrice: averagePrice ?? marketAverage ?? price,
+    marketPrices,
   };
 }
 

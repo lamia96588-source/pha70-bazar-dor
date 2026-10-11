@@ -412,6 +412,231 @@ select:focus-visible {
   margin: 0;
 }
 
+.shell.product-detail-main {
+  flex: 1 0 auto;
+  padding-top: 24px;
+  padding-bottom: 64px;
+}
+
+.breadcrumbs {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 25px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.breadcrumbs a:hover {
+  color: var(--green);
+}
+
+.breadcrumbs [aria-current="page"] {
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-summary-card,
+.price-overview-card {
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  background: var(--surface);
+}
+
+.product-summary-card {
+  display: flex;
+  min-height: 174px;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.product-summary-icon {
+  display: grid;
+  width: 80px;
+  height: 80px;
+  flex: 0 0 80px;
+  place-items: center;
+  border-radius: 17px;
+  background: var(--surface-soft);
+  font-size: 39px;
+}
+
+.product-summary-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.product-summary-copy h1 {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 760;
+  letter-spacing: -0.045em;
+  line-height: 1.25;
+}
+
+.product-summary-copy p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.product-summary-copy .product-movement {
+  margin-top: 8px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.current-price-card {
+  display: flex;
+  width: 118px;
+  min-height: 132px;
+  flex: 0 0 118px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 15px;
+  color: var(--muted);
+  background: var(--surface-soft);
+  font-size: 13px;
+  text-align: center;
+}
+
+.current-price-card strong {
+  color: var(--text);
+  font-size: 32px;
+  font-weight: 780;
+  line-height: 1.2;
+}
+
+.current-price-card small {
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.price-overview-card {
+  margin-top: 24px;
+  padding: 20px;
+}
+
+.price-overview-heading,
+.market-prices-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.price-overview-heading h2,
+.market-prices-heading h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 730;
+  letter-spacing: -0.025em;
+}
+
+.price-overview-heading span,
+.market-prices-heading span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.price-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 13px;
+}
+
+.price-stat-card {
+  display: flex;
+  min-height: 102px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 14px 17px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.price-stat-card > span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.price-stat-card strong {
+  margin-top: 2px;
+  font-size: 22px;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.price-stat-card small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.market-prices-heading {
+  margin: 24px 0 12px;
+}
+
+.market-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.market-price-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.market-price-table th,
+.market-price-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #d8e0d8;
+  text-align: left;
+}
+
+.market-price-table th {
+  color: var(--muted);
+  background: #f7faf7;
+  font-weight: 650;
+}
+
+.market-price-table tbody tr:nth-child(even) {
+  background: #f1f6f1;
+}
+
+.market-price-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.market-price-table td:nth-child(n + 3),
+.market-price-table th:nth-child(n + 3) {
+  text-align: right;
+}
+
+.market-price-table td:last-child strong {
+  font-weight: 730;
+}
+
+.market-prices-empty {
+  padding: 28px 18px;
+  border: 1px dashed #cfd8cf;
+  border-radius: 15px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
 .hero-card {
   position: relative;
   display: flex;
@@ -865,6 +1090,111 @@ select:focus-visible {
   .category-results-summary {
     margin: 11px 0 13px;
     font-size: 12px;
+  }
+
+  .shell.product-detail-main {
+    padding-top: 16px;
+    padding-bottom: 40px;
+  }
+
+  .breadcrumbs {
+    gap: 7px;
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+
+  .product-summary-card {
+    min-height: 142px;
+    gap: 11px;
+    padding: 13px;
+    border-radius: 16px;
+  }
+
+  .product-summary-icon {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
+    border-radius: 13px;
+    font-size: 28px;
+  }
+
+  .product-summary-copy h1 {
+    font-size: 20px;
+  }
+
+  .product-summary-copy p {
+    font-size: 12px;
+  }
+
+  .product-summary-copy .product-movement {
+    margin-top: 5px;
+    font-size: 11px;
+  }
+
+  .current-price-card {
+    width: 88px;
+    min-height: 105px;
+    flex-basis: 88px;
+    border-radius: 13px;
+    font-size: 11px;
+  }
+
+  .current-price-card strong {
+    font-size: 26px;
+  }
+
+  .current-price-card small {
+    font-size: 11px;
+  }
+
+  .price-overview-card {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .price-overview-heading h2,
+  .market-prices-heading h2 {
+    font-size: 16px;
+  }
+
+  .price-stat-grid {
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .price-stat-card {
+    min-height: 92px;
+    padding: 10px;
+    border-radius: 13px;
+  }
+
+  .price-stat-card > span {
+    font-size: 10px;
+  }
+
+  .price-stat-card strong {
+    font-size: 16px;
+  }
+
+  .price-stat-card small {
+    font-size: 9px;
+  }
+
+  .market-prices-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 19px;
+  }
+
+  .market-price-table {
+    font-size: 12px;
+  }
+
+  .market-price-table th,
+  .market-price-table td {
+    padding: 10px 11px;
   }
 
   .hero-card {
