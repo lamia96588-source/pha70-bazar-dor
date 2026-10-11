@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCatalogProducts } from "@/lib/catalog-api";
+import { requireAuthenticatedUser } from "@/lib/session";
 import {
   categoryBySlug,
   formatBanglaNumber,
@@ -46,6 +47,7 @@ export async function generateMetadata({ params }) {
 
 export default async function ProductPage({ params }) {
   const { slug } = await params;
+  await requireAuthenticatedUser(`/product/${encodeURIComponent(slug)}`);
   const catalog = await getCatalogProducts();
   const product = catalog.products.find((item) => item.slug === slug);
   if (!product) notFound();
