@@ -1079,6 +1079,191 @@ select:focus-visible {
   color: var(--green);
 }
 
+.loading-main {
+  padding-top: 24px;
+  padding-bottom: 52px;
+}
+
+.loading-shape {
+  display: block;
+  overflow: hidden;
+  background: linear-gradient(100deg, #edf2ee 22%, #f8faf8 42%, #edf2ee 62%);
+  background-size: 220% 100%;
+  animation: loading-shimmer 1.4s ease-in-out infinite;
+}
+
+.loading-hero {
+  display: flex;
+  min-height: 284px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 23px;
+  background: var(--surface);
+}
+
+.loading-hero-copy {
+  display: flex;
+  width: min(650px, 70%);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.loading-line {
+  height: 14px;
+  border-radius: 999px;
+}
+
+.loading-date {
+  width: 148px;
+  height: 27px;
+}
+
+.loading-hero-title {
+  width: min(480px, 88%);
+  height: 34px;
+  margin-top: 1px;
+}
+
+.loading-hero-description {
+  width: min(560px, 100%);
+}
+
+.loading-hero-description-short {
+  width: min(390px, 75%);
+  margin-top: -7px;
+}
+
+.loading-button {
+  width: 120px;
+  height: 42px;
+  margin-top: 8px;
+  border-radius: 10px;
+}
+
+.loading-basket {
+  width: 220px;
+  height: 190px;
+  flex: 0 0 220px;
+  border-radius: 48% 48% 24% 24%;
+  opacity: 0.8;
+}
+
+.loading-section {
+  margin-top: 36px;
+}
+
+.loading-section-title {
+  width: 200px;
+  height: 22px;
+  margin-bottom: 15px;
+}
+
+.loading-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.loading-card {
+  display: flex;
+  min-height: 138px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--surface);
+}
+
+.loading-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.loading-icon {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  border-radius: 13px;
+}
+
+.loading-copy-lines {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loading-line-title {
+  width: min(170px, 88%);
+}
+
+.loading-line-short {
+  width: min(92px, 56%);
+  height: 10px;
+}
+
+.loading-line-price {
+  width: 112px;
+  height: 20px;
+  margin-top: 12px;
+}
+
+.not-found-main {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  padding-top: 60px;
+  padding-bottom: 72px;
+}
+
+.not-found-card {
+  width: min(620px, 100%);
+  padding: 42px 32px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.not-found-code {
+  display: inline-block;
+  color: var(--green);
+  font-size: clamp(58px, 11vw, 88px);
+  font-weight: 800;
+  letter-spacing: -0.07em;
+  line-height: 1;
+}
+
+.not-found-card h1 {
+  margin: 18px 0 7px;
+  font-size: clamp(23px, 4vw, 30px);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+}
+
+.not-found-card p {
+  max-width: 450px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.not-found-home {
+  margin-top: 24px;
+}
+
+@keyframes loading-shimmer {
+  to {
+    background-position-x: -220%;
+  }
+}
+
 .hero-button {
   min-width: 120px;
   margin-top: 26px;
@@ -1736,5 +1921,70 @@ select:focus-visible {
 
   .profile-back-link {
     margin-left: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .loading-hero {
+    min-height: 240px;
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .loading-basket {
+    width: 150px;
+    height: 140px;
+    flex-basis: 150px;
+  }
+
+  .loading-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .loading-main {
+    padding-top: 16px;
+    padding-bottom: 36px;
+  }
+
+  .loading-hero {
+    min-height: 210px;
+    padding: 20px;
+  }
+
+  .loading-hero-copy {
+    width: 100%;
+    gap: 13px;
+  }
+
+  .loading-basket {
+    display: none;
+  }
+
+  .loading-hero-title {
+    height: 28px;
+  }
+
+  .loading-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .loading-card {
+    min-height: 120px;
+    padding: 13px;
+  }
+
+  .loading-section {
+    margin-top: 28px;
+  }
+
+  .not-found-main {
+    padding: 36px 0 48px;
+  }
+
+  .not-found-card {
+    padding: 34px 20px;
   }
 }
