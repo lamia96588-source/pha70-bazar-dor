@@ -9,7 +9,7 @@ export const categories = [
   { slug: "moshla", name: "মসলা", icon: "🌶️" },
 ];
 
-export const products = [
+export const sampleProducts = [
   { slug: "swarnachini-rice", name: "স্বর্ণচিনি চাল", category: "chal", emoji: "🍚", unit: "কেজি", price: 148, change: 2.6 },
   { slug: "miniket-rice", name: "মিনিকেট চাল", category: "chal", emoji: "🍚", unit: "কেজি", price: 99, change: -2.9 },
   { slug: "nazirshail-rice", name: "নাজির চাল", category: "chal", emoji: "🍚", unit: "কেজি", price: 74, change: 0 },
@@ -70,12 +70,16 @@ export function getProductChangeLabel(change) {
   return `${arrow} ${formatBanglaNumber(Math.abs(change))}%`;
 }
 
-export const risingProducts = [...products]
-  .filter((product) => product.change > 0)
-  .sort((left, right) => right.change - left.change)
-  .slice(0, 6);
+export function getRisingProducts(productList) {
+  return [...productList]
+    .filter((product) => product.change > 0)
+    .sort((left, right) => right.change - left.change)
+    .slice(0, 6);
+}
 
-export const fallingProducts = [...products]
-  .filter((product) => product.change < 0)
-  .sort((left, right) => left.change - right.change)
-  .slice(0, 6);
+export function getFallingProducts(productList) {
+  return [...productList]
+    .filter((product) => product.change < 0)
+    .sort((left, right) => left.change - right.change)
+    .slice(0, 6);
+}

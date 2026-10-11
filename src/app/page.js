@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "@/components/product-card";
+import { getCatalogProducts } from "@/lib/catalog-api";
 import {
-  fallingProducts,
   formatBanglaNumber,
   getBanglaDate,
-  products,
-  risingProducts,
+  getFallingProducts,
+  getRisingProducts,
 } from "@/lib/catalog-data";
 
 function ProductSection({ direction, products: sectionProducts }) {
@@ -30,7 +30,12 @@ function ProductSection({ direction, products: sectionProducts }) {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const catalog = await getCatalogProducts();
+  const { products } = catalog;
+  const risingProducts = getRisingProducts(products);
+  const fallingProducts = getFallingProducts(products);
+
   return (
     <main className="shell home-main">
       <section aria-labelledby="home-title" className="hero-card">
@@ -64,7 +69,9 @@ export default function Home() {
             <h2 className="section-title" id="all-products-heading">সব পণ্য</h2>
             <p className="section-subtitle">মোট {formatBanglaNumber(products.length)}টি পণ্য দেখানো হচ্ছে</p>
           </div>
-          <span className="sample-data-note">নমুনা মূল্য</span>
+          <span className="sample-data-note">
+            {catalog.source === "api" ? "সর্বশেষ API মূল্য" : "নমুনা মূল্য"}
+          </span>
         </div>
         <div className="product-grid">
           {products.map((product) => <ProductCard key={product.slug} product={product} />)}

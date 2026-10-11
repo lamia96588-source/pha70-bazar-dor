@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { getProductChangeLabel, products, formatTaka } from "@/lib/catalog-data";
+import { getProductChangeLabel, formatTaka } from "@/lib/catalog-data";
 
-function TickerItems({ interactive = true }) {
+function TickerItems({ interactive = true, products }) {
   return products.slice(0, 12).map((product, index) => (
     interactive ? (
       <Link className="ticker-item" href={`/product/${product.slug}`} key={`${product.slug}-${index}`}>
@@ -28,12 +28,12 @@ function TickerItemContent({ product }) {
   );
 }
 
-export default function PriceTicker() {
+export default function PriceTicker({ products }) {
   return (
     <div aria-label="আজকের পণ্যের দাম" className="ticker" role="region">
       <div className="ticker-track">
-        <div className="ticker-group"><TickerItems /></div>
-        <div aria-hidden="true" className="ticker-group"><TickerItems interactive={false} /></div>
+        <div className="ticker-group"><TickerItems products={products} /></div>
+        <div aria-hidden="true" className="ticker-group"><TickerItems interactive={false} products={products} /></div>
       </div>
     </div>
   );
