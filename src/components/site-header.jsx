@@ -14,6 +14,7 @@ export default function SiteHeader() {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const accountName = user ? getUserDisplayName(user) : "অ্যাকাউন্ট";
+  const isAuthPage = pathname === "/signin" || pathname === "/signup";
 
   async function handleSignOut() {
     await authClient.signOut();
@@ -34,55 +35,70 @@ export default function SiteHeader() {
             </span>
           </Link>
 
-          <div className="account-area">
-            <button
-              aria-expanded={menuOpen}
-              aria-haspopup="menu"
-              className="account-trigger"
-              onClick={() => setMenuOpen((isOpen) => !isOpen)}
-              type="button"
-            >
-              <span aria-hidden="true" className="account-avatar">
-                {user ? getUserInitials(user) : "👤"}
-              </span>
-              <span className="account-trigger-label">
-                {isPending ? "অ্যাকাউন্ট" : accountName}
-              </span>
-              <span aria-hidden="true" className="account-caret">⌄</span>
-            </button>
-            {menuOpen ? (
-              <div className="account-menu" role="menu">
-                {user ? (
-                  <>
-                    <strong>{getUserDisplayName(user)}</strong>
-                    <p>{user.email}</p>
-                    <Link href="/profile" onClick={() => setMenuOpen(false)} role="menuitem">
-                      👤 আমার প্রোফাইল
-                    </Link>
-                    <button
-                      className="account-menu-signout"
-                      onClick={handleSignOut}
-                      role="menuitem"
-                      type="button"
-                    >
-                      ↩ সাইন আউট
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <strong>স্বাগতম</strong>
-                    <p>দাম তুলনা ও প্রোফাইল দেখতে সাইন ইন করুন।</p>
-                    <Link href="/signin" onClick={() => setMenuOpen(false)} role="menuitem">
-                      👤 সাইন ইন
-                    </Link>
-                    <Link href="/signup" onClick={() => setMenuOpen(false)} role="menuitem">
-                      অ্যাকাউন্ট তৈরি করুন
-                    </Link>
-                  </>
-                )}
-              </div>
-            ) : null}
-          </div>
+          {isAuthPage ? (
+            <nav aria-label="অ্যাকাউন্ট" className="header-auth-nav">
+              <Link aria-current={pathname === "/signin" ? "page" : undefined} href="/signin">
+                সাইন ইন
+              </Link>
+              <Link
+                aria-current={pathname === "/signup" ? "page" : undefined}
+                className="button button-primary"
+                href="/signup"
+              >
+                সাইন আপ
+              </Link>
+            </nav>
+          ) : (
+            <div className="account-area">
+              <button
+                aria-expanded={menuOpen}
+                aria-haspopup="menu"
+                className="account-trigger"
+                onClick={() => setMenuOpen((isOpen) => !isOpen)}
+                type="button"
+              >
+                <span aria-hidden="true" className="account-avatar">
+                  {user ? getUserInitials(user) : "👤"}
+                </span>
+                <span className="account-trigger-label">
+                  {isPending ? "অ্যাকাউন্ট" : accountName}
+                </span>
+                <span aria-hidden="true" className="account-caret">⌄</span>
+              </button>
+              {menuOpen ? (
+                <div className="account-menu" role="menu">
+                  {user ? (
+                    <>
+                      <strong>{getUserDisplayName(user)}</strong>
+                      <p>{user.email}</p>
+                      <Link href="/profile" onClick={() => setMenuOpen(false)} role="menuitem">
+                        👤 আমার প্রোফাইল
+                      </Link>
+                      <button
+                        className="account-menu-signout"
+                        onClick={handleSignOut}
+                        role="menuitem"
+                        type="button"
+                      >
+                        ↩ সাইন আউট
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <strong>স্বাগতম</strong>
+                      <p>দাম তুলনা ও প্রোফাইল দেখতে সাইন ইন করুন।</p>
+                      <Link href="/signin" onClick={() => setMenuOpen(false)} role="menuitem">
+                        👤 সাইন ইন
+                      </Link>
+                      <Link href="/signup" onClick={() => setMenuOpen(false)} role="menuitem">
+                        অ্যাকাউন্ট তৈরি করুন
+                      </Link>
+                    </>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          )}
         </div>
       </div>
 
