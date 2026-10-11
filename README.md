@@ -20,6 +20,12 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## MongoDB
+
+The MongoDB Node.js driver is already included. Copy `.env.example` to `.env.local` and set `MONGODB_URI` to your local MongoDB server or MongoDB Atlas connection string. Keep the URI private and do not use a `NEXT_PUBLIC_` prefix. `MONGODB_DB` is optional; it defaults to `pha7-bazar-dor`.
+
+Start the app and open [`http://localhost:3000/api/health/mongodb`](http://localhost:3000/api/health/mongodb) to check the connection. A successful response includes `status: "ok"` and the selected database name.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
