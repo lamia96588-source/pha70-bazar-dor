@@ -1,6 +1,22 @@
-# বাজার দর (Bazar Dor)
+# বাজার দর (BazarDor)
 
-A Bengali market-price comparison site built with Next.js App Router. It shows daily prices for essential products, category listings, market comparisons, and authenticated profile pages.
+**বাজার দর** is a Bengali market-price tracker for comparing daily prices of essential products across categories and local markets.
+
+## Key features
+
+1. Browse a daily overview of products with price changes, including rising and falling prices.
+2. Explore category pages and sort prices numerically from low to high or high to low.
+3. Compare each product's minimum, maximum, and average prices across markets.
+4. Create an account or sign in with email and password; optionally enable Google and GitHub OAuth.
+5. View protected product details and manage your profile, including updating your name.
+
+## Technologies
+
+- Next.js 16.4 App Router and React 19.3
+- Tailwind CSS 4 and DaisyUI 5
+- Better Auth 1.7 for email/password authentication and optional OAuth
+- MongoDB Node.js driver 7.7 with the Better Auth MongoDB adapter
+- Programming Hero BazarDor products API, with a bundled sample catalog fallback
 
 ## Requirements
 
@@ -11,14 +27,14 @@ A Bengali market-price comparison site built with Next.js App Router. It shows d
 
 Install dependencies and create a local environment file:
 
-```bash
+```powershell
 npm install
-cp .env.example .env.local
+Copy-Item .env.example .env.local
 ```
 
 Set the values in `.env.local`, then start the app:
 
-```bash
+```powershell
 npm run dev
 ```
 
@@ -36,7 +52,7 @@ Open the local URL printed by Next.js. If it selects a port other than `3000`, s
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | No | Enable Google sign-in when both values are set. |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | No | Enable GitHub sign-in when both values are set. |
 
-Keep `.env.local` private. It is excluded from Git. For OAuth sign-in, configure the matching client ID and secret in your identity provider and in `.env.local`.
+Keep `.env.local` private. It is excluded from Git. For OAuth sign-in, configure the matching client ID and secret with the provider and in `.env.local`.
 
 ## MongoDB connection check
 
@@ -63,11 +79,11 @@ API data is refreshed every five minutes. If the API is unavailable or its respo
 | Route | Description |
 | --- | --- |
 | `/` | Home page and product price overview |
-| `/category/[slug]` | Category listing with sorting |
+| `/category/[slug]` | Category listing with numeric price sorting |
 | `/product/[slug]` | Protected product details and market comparison |
 | `/signin`, `/signup` | Email/password authentication and optional social sign-in |
-| `/profile` | Protected profile and name update |
-| `/profile/update` | Protected profile update page |
+| `/profile` | Protected profile overview |
+| `/profile/update` | Protected name update form |
 | `/api/auth/[...all]` | Better Auth API handler |
 | `/api/health/mongodb` | MongoDB ping check |
 
@@ -75,7 +91,7 @@ The root `src/proxy.js` performs a quick session-cookie check for protected rout
 
 ## Project checks
 
-```bash
+```powershell
 npm run lint
 npm run build
 npm run start

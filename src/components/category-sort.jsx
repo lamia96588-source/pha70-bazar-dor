@@ -27,8 +27,6 @@ export default function CategorySort({ sort }) {
         <option value="default">ডিফল্ট</option>
         <option value="price-asc">দাম: কম থেকে বেশি</option>
         <option value="price-desc">দাম: বেশি থেকে কম</option>
-        <option value="change-desc">দাম বৃদ্ধি</option>
-        <option value="change-asc">দাম হ্রাস</option>
       </select>
     </div>
   );

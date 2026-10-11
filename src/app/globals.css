@@ -953,6 +953,16 @@ select:focus-visible {
   padding: 20px 24px;
 }
 
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.profile-update-link {
+  min-width: 180px;
+}
+
 .profile-avatar {
   display: grid;
   width: 80px;
@@ -1896,6 +1906,14 @@ select:focus-visible {
     flex-basis: 58px;
     border-radius: 14px;
     font-size: 22px;
+  }
+
+  .profile-actions {
+    justify-content: stretch;
+  }
+
+  .profile-update-link {
+    width: 100%;
   }
 
   .profile-account-copy strong {

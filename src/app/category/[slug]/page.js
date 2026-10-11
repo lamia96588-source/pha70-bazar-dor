@@ -4,7 +4,7 @@ import { getCatalogProducts } from "@/lib/catalog-api";
 import { categories, categoryBySlug, formatBanglaNumber } from "@/lib/catalog-data";
 import { notFound } from "next/navigation";
 
-const supportedSorts = new Set(["default", "price-asc", "price-desc", "change-desc", "change-asc"]);
+const supportedSorts = new Set(["default", "price-asc", "price-desc"]);
 
 function sortProducts(products, sort) {
   const sorted = [...products];
@@ -14,10 +14,6 @@ function sortProducts(products, sort) {
       return sorted.sort((left, right) => left.price - right.price);
     case "price-desc":
       return sorted.sort((left, right) => right.price - left.price);
-    case "change-desc":
-      return sorted.sort((left, right) => right.change - left.change);
-    case "change-asc":
-      return sorted.sort((left, right) => left.change - right.change);
     default:
       return sorted;
   }

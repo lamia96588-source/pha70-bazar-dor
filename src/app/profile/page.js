@@ -1,5 +1,5 @@
 import ProfileAccountCard from "@/components/profile-account-card";
-import ProfileEditor from "@/components/profile-editor";
+import Link from "next/link";
 import { requireAuthenticatedUser } from "@/lib/session";
 import { getUserDisplayName, getUserInitials } from "@/lib/utils";
 
@@ -19,7 +19,11 @@ export default async function ProfilePage() {
       </header>
 
       <ProfileAccountCard email={user.email} initials={getUserInitials(user)} name={name} />
-      <ProfileEditor initialName={user.name ?? ""} />
+      <div className="profile-actions">
+        <Link className="button button-primary profile-update-link" href="/profile/update">
+          তথ্য আপডেট করুন
+        </Link>
+      </div>
     </main>
   );
 }
