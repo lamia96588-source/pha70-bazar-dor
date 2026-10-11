@@ -215,6 +215,21 @@ select:focus-visible {
   color: var(--green);
 }
 
+.account-menu button {
+  padding: 9px 0;
+  border: 0;
+  border-top: 1px solid #edf1ed;
+  color: var(--text);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.account-menu button:hover {
+  color: #d32f2f;
+}
+
 .category-nav {
   height: 50px;
   border-bottom: 1px solid var(--line);
