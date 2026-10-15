@@ -46,13 +46,15 @@ Open the local URL printed by Next.js. If it selects a port other than `3000`, s
 | --- | --- | --- |
 | `MONGODB_URI` | Yes | MongoDB connection string. Local default: `mongodb://127.0.0.1:27017`. |
 | `MONGODB_DB` | No | Database name. Defaults to `pha7-bazar-dor`. |
-| `BETTER_AUTH_URL` | Yes | The app's base URL, such as `http://localhost:3000`. |
+| `BETTER_AUTH_URL` | Local only | The app's base URL, such as `http://localhost:3000`. On Vercel, Better Auth uses the deployment host and Vercel project/branch hostnames; set this to your canonical `https://` domain if you use a custom domain. |
 | `BETTER_AUTH_SECRET` | Yes | A private random secret with at least 32 characters. |
 | `BAZARDOR_API_BASE_URL` | No | Catalog API base URL. Defaults to the Programming Hero BazarDor API. The app requests its `/products` endpoint. |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | No | Enable Google sign-in when both values are set. |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | No | Enable GitHub sign-in when both values are set. |
 
 Keep `.env.local` private. It is excluded from Git. For OAuth sign-in, configure the matching client ID and secret with the provider and in `.env.local`.
+
+For Vercel deployments, add `MONGODB_URI` (a remotely reachable MongoDB URI) and a unique `BETTER_AUTH_SECRET` of at least 32 characters to the Vercel environment settings, then redeploy. Add Google or GitHub credentials only for the providers you have configured.
 
 ## MongoDB connection check
 
