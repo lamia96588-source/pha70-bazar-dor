@@ -2,9 +2,10 @@ import { categories, sampleProducts } from "@/lib/catalog-data";
 
 const DEFAULT_API_BASE_URL = "https://openapi.programming-hero.com/api/bazardor";
 const PRODUCT_COLLECTION_KEYS = ["products", "items", "records", "results", "data", "result"];
-const PRODUCT_NAME_KEYS = ["name", "productName", "product_name", "title", "bnName", "banglaName", "itemName"];
+const PRODUCT_NAME_KEYS = ["name", "nameBn", "productName", "product_name", "title", "bnName", "banglaName", "itemName"];
 const PRODUCT_PRICE_KEYS = [
   "price",
+  "today",
   "currentPrice",
   "current_price",
   "averagePrice",
@@ -100,7 +101,7 @@ function toPrice(value, record) {
 }
 
 function toChange(record) {
-  const value = firstDefined(record, [
+  const rawValue = firstDefined(record, [
     "changePercent",
     "change_percent",
     "priceChangePercent",
@@ -111,6 +112,23 @@ function toChange(record) {
     "trend_percent",
     "change",
   ]);
+
+  if (rawValue && typeof rawValue === "object") {
+    const amount = toNumber(firstDefined(rawValue, ["pct", "percent", "percentage", "value"])) ?? 0;
+    const direction = String(firstDefined(rawValue, ["dir", "direction", "trend"]) ?? "").toLowerCase();
+
+    if (["down", "decrease", "decreasing", "negative", "-"] .some((value) => direction.includes(value))) {
+      return -Math.abs(amount);
+    }
+
+    if (["up", "increase", "increasing", "positive", "+"] .some((value) => direction.includes(value))) {
+      return Math.abs(amount);
+    }
+
+    return amount;
+  }
+
+  const value = rawValue;
   return toNumber(value) ?? 0;
 }
 
@@ -204,12 +222,25 @@ function normalizeProduct(record, index) {
     ? marketPrices.reduce((sum, market) => sum + market.averagePrice, 0) / marketPrices.length
     : null;
 
+  const rawUnit = String(firstDefined(record, ["unit", "measurementUnit", "measurement_unit", "priceUnit", "price_unit"]) ?? knownProduct?.unit ?? "কেজি");
+  const unit = ({
+    kg: "কেজি",
+    kilogram: "কেজি",
+    liter: "লিটার",
+    litre: "লিটার",
+    l: "লিটার",
+    piece: "পিস",
+    pieces: "পিস",
+    pcs: "পিস",
+    dozen: "ডজন",
+  })[rawUnit.trim().toLowerCase()] ?? rawUnit;
+
   return {
     slug,
     name,
     category: category?.slug ?? (typeof categoryValue === "string" ? makeSlug(categoryValue, index) : "other"),
     emoji: String(firstDefined(record, ["emoji", "icon"]) ?? knownProduct?.emoji ?? category?.icon ?? "🛒"),
-    unit: String(firstDefined(record, ["unit", "measurementUnit", "measurement_unit", "priceUnit", "price_unit"]) ?? knownProduct?.unit ?? "কেজি"),
+    unit,
     price,
     change: toChange(record),
     changeAmount: toNumber(firstDefined(record, ["changeAmount", "change_amount", "priceChangeAmount", "price_change_amount", "priceDifference", "price_difference"])),

@@ -1,17 +1,24 @@
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { betterAuth } from "better-auth/minimal";
-import { getMongoClient } from "@/lib/mongodb";
+import { getDatabaseName, getMongoClient } from "@/lib/mongodb";
 
-const databaseName = process.env.MONGODB_DB || "pha7-bazar-dor";
-const database = getMongoClient().db(databaseName);
+const database = getMongoClient().db(getDatabaseName());
 const socialProviders = {};
 
 function getAuthBaseURL() {
-  const configuredBaseURL = process.env.BETTER_AUTH_URL;
+  const configuredBaseURL = process.env.BETTER_AUTH_URL?.trim();
   const isVercel = process.env.VERCEL === "1";
 
   if (!isVercel) {
-    return configuredBaseURL;
+    if (configuredBaseURL) {
+      return configuredBaseURL;
+    }
+
+    return {
+      allowedHosts: ["localhost:*", "127.0.0.1:*", "[::1]:*"],
+      protocol: "http",
+      fallback: "http://localhost:3000",
+    };
   }
 
   let configuredURL;
@@ -34,7 +41,13 @@ function getAuthBaseURL() {
   ].filter(Boolean);
 
   if (allowedHosts.length === 0) {
-    return configuredBaseURL;
+    if (configuredURL && !configuredHostIsLocal) {
+      return configuredURL.origin;
+    }
+
+    throw new Error(
+      "Could not resolve a public Better Auth URL on Vercel. Set VERCEL_URL or BETTER_AUTH_URL to your public HTTPS domain.",
+    );
   }
 
   const fallbackURL =

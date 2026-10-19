@@ -21,15 +21,14 @@
 ## Requirements
 
 - Node.js and npm
-- A running MongoDB server or MongoDB Atlas database
+- A MongoDB Atlas database and its connection string
 
 ## Run locally
 
-Install dependencies and create a local environment file:
+Install dependencies and create `.env.local` in the project root with the variables listed below:
 
 ```powershell
 npm install
-Copy-Item .env.example .env.local
 ```
 
 Set the values in `.env.local`, then start the app:
@@ -44,21 +43,21 @@ Open the local URL printed by Next.js. If it selects a port other than `3000`, s
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `MONGODB_URI` | Yes | MongoDB connection string. Local default: `mongodb://127.0.0.1:27017`. |
+| `MONGODB_URI` | Yes | MongoDB Atlas connection string (usually `mongodb+srv://...`). Vercel cannot connect to a MongoDB server running on your computer. |
 | `MONGODB_DB` | No | Database name. Defaults to `pha7-bazar-dor`. |
-| `BETTER_AUTH_URL` | Local only | The app's base URL, such as `http://localhost:3000`. On Vercel, Better Auth uses the deployment host and Vercel project/branch hostnames; set this to your canonical `https://` domain if you use a custom domain. |
+| `BETTER_AUTH_URL` | No | Set this to your canonical `https://` domain only when using a custom domain. On Vercel, Better Auth automatically uses the deployment host and Vercel project/branch hostnames. |
 | `BETTER_AUTH_SECRET` | Yes | A private random secret with at least 32 characters. |
 | `BAZARDOR_API_BASE_URL` | No | Catalog API base URL. Defaults to the Programming Hero BazarDor API. The app requests its `/products` endpoint. |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | No | Enable Google sign-in when both values are set. |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | No | Enable GitHub sign-in when both values are set. |
 
-Keep `.env.local` private. It is excluded from Git. For OAuth sign-in, configure the matching client ID and secret with the provider and in `.env.local`.
+Keep `.env.local` private. It is excluded from Git. Add your Atlas connection string there for local development. For OAuth sign-in, configure the matching client ID and secret with the provider and in `.env.local`.
 
-For Vercel deployments, add `MONGODB_URI` (a remotely reachable MongoDB URI) and a unique `BETTER_AUTH_SECRET` of at least 32 characters to the Vercel environment settings, then redeploy. Add Google or GitHub credentials only for the providers you have configured.
+For Vercel deployments, add `MONGODB_URI` (your Atlas URI), `MONGODB_DB` (`pha7-bazar-dor` unless you chose another name), and a unique `BETTER_AUTH_SECRET` of at least 32 characters to the Vercel environment settings, then redeploy. Vercel does not read your local `.env.local` file. Add Google or GitHub credentials only for the providers you have configured.
 
 ## MongoDB connection check
 
-With MongoDB running and the app started, open:
+With the app started and `MONGODB_URI` set to your Atlas connection string, open:
 
 ```text
 http://localhost:3000/api/health/mongodb
