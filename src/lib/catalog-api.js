@@ -175,20 +175,30 @@ function categoryFor(value) {
   if (!candidate) return null;
 
   const normalized = String(candidate).trim().toLocaleLowerCase("bn-BD");
+  const compact = normalized.replace(/[-_\s]+/g, "");
+  const canonicalSlugAliases = {
+    "dim-dui": "dudh-dim",
+    dimdui: "dudh-dim",
+    dudhdim: "dudh-dim",
+    "dudh-dhim": "dudh-dim",
+    mosla: "moshla",
+    moshla: "moshla",
+  };
+  const resolvedSlug = canonicalSlugAliases[normalized] ?? canonicalSlugAliases[compact] ?? normalized;
   const aliases = {
-    chal: ["rice", "চাল"],
-    dal: ["lentil", "pulse", "ডাল"],
-    tel: ["oil", "তেল"],
-    sobji: ["vegetable", "সবজি"],
-    mach: ["fish", "মাছ"],
-    mangsho: ["meat", "chicken", "মাংস"],
-    "dudh-dim": ["milk", "egg", "দুধ", "ডিম"],
-    moshla: ["spice", "মসলা", "মসলা"],
+    chal: ["rice", "চাল", "chal"],
+    dal: ["lentil", "pulse", "ডাল", "dal"],
+    tel: ["oil", "তেল", "tel"],
+    sobji: ["vegetable", "সবজি", "sobji"],
+    mach: ["fish", "মাছ", "mach"],
+    mangsho: ["meat", "chicken", "মাংস", "mangsho"],
+    "dudh-dim": ["milk", "egg", "দুধ", "ডিম", "dim", "dud", "doi", "dudh", "doodh", "dudh-dim", "dim-dui"],
+    moshla: ["spice", "মসলা", "mosla", "moshla", "morich", "holud", "ada", "roshun", "moshola"],
   };
 
   return categories.find((category) => {
-    if (category.slug === normalized || category.name === candidate) return true;
-    return aliases[category.slug]?.some((alias) => normalized.includes(alias));
+    if (category.slug === resolvedSlug || category.slug === normalized || category.name === candidate) return true;
+    return aliases[category.slug]?.some((alias) => resolvedSlug.includes(alias) || normalized.includes(alias));
   }) ?? null;
 }
 
@@ -239,9 +249,12 @@ function normalizeProduct(record, index) {
     slug,
     name,
     category: category?.slug ?? (typeof categoryValue === "string" ? makeSlug(categoryValue, index) : "other"),
-    emoji: String(firstDefined(record, ["emoji", "icon"]) ?? knownProduct?.emoji ?? category?.icon ?? "🛒"),
+    emoji: String(firstDefined(record, ["emoji", "icon", "image"]) ?? knownProduct?.emoji ?? category?.icon ?? "🛒"),
     unit,
     price,
+    yesterday: toNumber(firstDefined(record, ["yesterday", "yesterdayPrice", "yesterday_price", "prevPrice", "prev_price", "previousPrice"])),
+    lastWeek: toNumber(firstDefined(record, ["lastWeek", "last_week", "lastWeekPrice", "last_week_price"])),
+    lastMonth: toNumber(firstDefined(record, ["lastMonth", "last_month", "lastMonthPrice", "last_month_price"])),
     change: toChange(record),
     changeAmount: toNumber(firstDefined(record, ["changeAmount", "change_amount", "priceChangeAmount", "price_change_amount", "priceDifference", "price_difference"])),
     minimumPrice: minimumPrice ?? marketMinimum ?? price,

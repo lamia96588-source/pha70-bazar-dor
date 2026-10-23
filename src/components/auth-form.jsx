@@ -35,7 +35,12 @@ function getCallbackPath() {
 function getFormError(error, isSocial = false) {
   const code = error?.code?.toUpperCase();
 
-  if (code === "USER_ALREADY_EXISTS" || code === "EMAIL_ALREADY_EXISTS") {
+  if (
+    code === "USER_ALREADY_EXISTS" ||
+    code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL" ||
+    code === "EMAIL_ALREADY_EXISTS" ||
+    code === "EMAIL_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
+  ) {
     return "এই ইমেইল দিয়ে আগে থেকেই একটি অ্যাকাউন্ট আছে।";
   }
 
@@ -192,6 +197,10 @@ export default function AuthForm({ mode }) {
             <span>GitHub দিয়ে চালিয়ে যান</span>
           </button>
         </div>
+
+        <p className="auth-provider-note">
+          Google/GitHub শুধুমাত্র সার্ভারে কনফিগার করা থাকলে কাজ করবে। কনফিগার না থাকলে বাংলায় জানিয়ে দেওয়া হবে।
+        </p>
 
         <p className="auth-form-switch">
           {isSignUp ? "অ্যাকাউন্ট আছে? " : "অ্যাকাউন্ট নেই? "}

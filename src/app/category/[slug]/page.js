@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 
 const supportedSorts = new Set(["default", "price-asc", "price-desc"]);
 
+export const dynamicParams = false;
+
 function sortProducts(products, sort) {
   const sorted = [...products];
 
