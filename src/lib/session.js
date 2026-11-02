@@ -8,7 +8,7 @@ export async function requireAuthenticatedUser(callbackPath = "/profile") {
 
   if (!session?.user) {
     const safeCallbackPath = getSafeRedirectPath(callbackPath, "/profile");
-    redirect(`/signin?callbackUrl=${encodeURIComponent(safeCallbackPath)}`);
+    redirect(`/signin?reason=auth-required&callbackUrl=${encodeURIComponent(safeCallbackPath)}`);
   }
 
   return session.user;

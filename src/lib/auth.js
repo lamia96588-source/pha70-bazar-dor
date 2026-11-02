@@ -1,8 +1,6 @@
-import { mongodbAdapter } from "@better-auth/mongo-adapter";
-import { betterAuth } from "better-auth/minimal";
-import { getDatabaseName, getMongoClient } from "@/lib/mongodb";
+import { betterAuth } from "better-auth";
+import { database } from "@/lib/database";
 
-const database = getMongoClient().db(getDatabaseName());
 const socialProviders = {};
 
 function getAuthBaseURL() {
@@ -80,9 +78,10 @@ export const auth = betterAuth({
   appName: "Bazar Dor",
   baseURL: getAuthBaseURL(),
   secret: process.env.BETTER_AUTH_SECRET,
-  database: mongodbAdapter(database, { transaction: false }),
+  database,
   emailAndPassword: {
     enabled: true,
+    autoSignIn: false,
   },
   ...(Object.keys(socialProviders).length > 0 ? { socialProviders } : {}),
 });

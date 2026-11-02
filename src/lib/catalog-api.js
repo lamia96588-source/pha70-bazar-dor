@@ -267,7 +267,8 @@ function normalizeProduct(record, index) {
 function getProductsEndpoint(category) {
   const baseUrl = (process.env.BAZARDOR_API_BASE_URL || DEFAULT_API_BASE_URL).replace(/\/+$/, "");
   const endpoint = new URL(`${baseUrl}/products`);
-  if (category) endpoint.searchParams.set("category", category);
+  const apiCategory = { "dudh-dim": "dim-dui", moshla: "mosla" }[category] ?? category;
+  if (apiCategory) endpoint.searchParams.set("category", apiCategory);
   return endpoint.toString();
 }
 
@@ -279,10 +280,14 @@ export async function getCatalogProducts({ category } = {}) {
   try {
     const response = await fetch(getProductsEndpoint(category), {
       next: { revalidate: 300 },
+      signal: AbortSignal.timeout(8000),
     });
     if (!response.ok) throw new Error(`Catalog API returned HTTP ${response.status}`);
 
     const payload = await response.json();
+    if (category && Array.isArray(payload) && payload.length === 0) {
+      return { products: [], source: "api" };
+    }
     const records = findProductRecords(payload);
     const products = records
       .map((record, index) => normalizeProduct(record, index))

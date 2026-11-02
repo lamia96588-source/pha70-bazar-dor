@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import { getSafeRedirectPath } from "@/lib/utils";
 
@@ -61,6 +62,15 @@ export default function AuthForm({ mode }) {
   const [errorMessage, setErrorMessage] = useState("");
   const isSignUp = mode === "signup";
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("reason") === "auth-required") {
+      toast("বিস্তারিত দেখতে প্রথমে সাইন ইন করুন।", { id: "auth-required" });
+      url.searchParams.delete("reason");
+      window.history.replaceState(window.history.state, "", url);
+    }
+  }, []);
+
   async function handleSubmit(event) {
     event.preventDefault();
     setErrorMessage("");
@@ -73,6 +83,13 @@ export default function AuthForm({ mode }) {
 
     if (isSignUp && password !== confirmPassword) {
       setErrorMessage("দুটি পাসওয়ার্ড মিলছে না।");
+      toast.error("দুটি পাসওয়ার্ড মিলছে না।");
+      return;
+    }
+
+    if (isSignUp && !name) {
+      setErrorMessage("নাম লিখুন।");
+      toast.error("নাম লিখুন।");
       return;
     }
 
@@ -84,14 +101,24 @@ export default function AuthForm({ mode }) {
         : await authClient.signIn.email({ email, password });
 
       if (result.error) {
-        setErrorMessage(getFormError(result.error));
+        const message = getFormError(result.error);
+        setErrorMessage(message);
+        toast.error(message);
         return;
       }
 
-      router.replace(getCallbackPath());
+      const callbackPath = getCallbackPath();
+      if (isSignUp) {
+        toast.success("নিবন্ধনের অনুরোধ সম্পন্ন হয়েছে। এখন সাইন ইন করুন।");
+        router.replace(`/signin?callbackUrl=${encodeURIComponent(callbackPath)}`);
+      } else {
+        toast.success("সাইন ইন সফল হয়েছে।");
+        router.replace(callbackPath);
+      }
       router.refresh();
     } catch {
       setErrorMessage("সার্ভারের সঙ্গে যোগাযোগ করা যায়নি। আবার চেষ্টা করুন।");
+      toast.error("সার্ভারের সঙ্গে যোগাযোগ করা যায়নি। আবার চেষ্টা করুন।");
     } finally {
       setIsSubmitting(false);
     }
@@ -108,10 +135,13 @@ export default function AuthForm({ mode }) {
       });
 
       if (result.error) {
-        setErrorMessage(getFormError(result.error, true));
+        const message = getFormError(result.error, true);
+        setErrorMessage(message);
+        toast.error(message);
       }
     } catch {
       setErrorMessage(getFormError(null, true));
+      toast.error(getFormError(null, true));
     } finally {
       setIsSubmitting(false);
     }
@@ -198,13 +228,16 @@ export default function AuthForm({ mode }) {
           </button>
         </div>
 
-        <p className="auth-provider-note">
-          Google/GitHub শুধুমাত্র সার্ভারে কনফিগার করা থাকলে কাজ করবে। কনফিগার না থাকলে বাংলায় জানিয়ে দেওয়া হবে।
-        </p>
-
         <p className="auth-form-switch">
           {isSignUp ? "অ্যাকাউন্ট আছে? " : "অ্যাকাউন্ট নেই? "}
-          <Link href={isSignUp ? "/signin" : "/signup"}>
+          <Link
+            href={isSignUp ? "/signin" : "/signup"}
+            onClick={(event) => {
+              event.preventDefault();
+              const destination = isSignUp ? "/signin" : "/signup";
+              router.push(`${destination}?callbackUrl=${encodeURIComponent(getCallbackPath())}`);
+            }}
+          >
             {isSignUp ? "সাইন ইন করুন" : "সাইন আপ করুন"}
           </Link>
         </p>
