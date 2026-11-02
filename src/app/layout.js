@@ -1,6 +1,7 @@
 import SiteHeader from "@/components/site-header";
 import PriceTicker from "@/components/price-ticker";
 import SiteFooter from "@/components/site-footer";
+import AuthNotices from "@/components/auth-notices";
 import { getCatalogProducts } from "@/lib/catalog-api";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
@@ -17,6 +18,7 @@ export default async function RootLayout({ children }) {
     <html lang="bn" className="h-full antialiased">
       <body className="app-body">
         <Toaster position="top-center" />
+        <AuthNotices />
         <SiteHeader />
         <PriceTicker products={products} />
         <div className="app-content">{children}</div>

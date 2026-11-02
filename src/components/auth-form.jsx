@@ -129,9 +129,12 @@ export default function AuthForm({ mode }) {
     setIsSubmitting(true);
 
     try {
+      const callback = new URL(getCallbackPath(), window.location.origin);
+      callback.searchParams.set("auth_notice", "signed-in");
       const result = await authClient.signIn.social({
         provider,
-        callbackURL: getCallbackPath(),
+        callbackURL: `${callback.pathname}${callback.search}${callback.hash}`,
+        errorCallbackURL: "/signin?auth_notice=failed",
       });
 
       if (result.error) {

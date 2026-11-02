@@ -107,4 +107,6 @@ npm run start
 
 Live: https://bazar-dor-a7-lamia-2026.vercel.app
 
-Source: https://github.com/lamia96588-source/pha70-bazar-dor
+Source: https://github.com/lamia96588-source/pha70-bazar-dor/tree/fix/supabase-auth-deployment
+
+Production authentication uses Better Auth with email/password, Google and GitHub. Both OAuth callbacks have been exercised against the live site, including protected profile access and page reloads.
