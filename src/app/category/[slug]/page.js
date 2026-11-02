@@ -3,6 +3,7 @@ import CategorySort from "@/components/category-sort";
 import { getCatalogProducts } from "@/lib/catalog-api";
 import { categories, categoryBySlug, formatBanglaNumber } from "@/lib/catalog-data";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 const supportedSorts = new Set(["default", "price-asc", "price-desc"]);
 
@@ -71,6 +72,7 @@ export default async function CategoryPage({ params, searchParams }) {
         <div className="category-empty-state">
           <span aria-hidden="true">{category.icon}</span>
           <p>এই বিভাগে এখনো কোনো পণ্যের দাম পাওয়া যায়নি।</p>
+          <Link href="/">হোম পেজে ফিরে যান</Link>
         </div>
       )}
     </main>

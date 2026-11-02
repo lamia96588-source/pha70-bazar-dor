@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import { categories, getBanglaDate } from "@/lib/catalog-data";
 import { getUserDisplayName, getUserInitials } from "@/lib/utils";
@@ -11,14 +12,23 @@ import { getUserDisplayName, getUserInitials } from "@/lib/utils";
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const accountName = user ? getUserDisplayName(user) : "অ্যাকাউন্ট";
   const isAuthPage = pathname === "/signin" || pathname === "/signup";
 
   async function handleSignOut() {
-    await authClient.signOut();
-    setMenuOpen(false);
+    try {
+      const result = await authClient.signOut();
+      if (result.error) throw new Error("Sign out failed");
+      setMenuOpen(false);
+      toast.success("সাইন আউট সফল হয়েছে।");
+      router.replace("/");
+      router.refresh();
+    } catch {
+      toast.error("সাইন আউট করা যায়নি। আবার চেষ্টা করুন।");
+    }
   }
 
   return (

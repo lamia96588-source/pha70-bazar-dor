@@ -9,6 +9,7 @@ export function proxy(request) {
   }
 
   const signInUrl = new URL("/signin", request.url);
+  signInUrl.searchParams.set("reason", "auth-required");
   signInUrl.searchParams.set(
     "callbackUrl",
     `${request.nextUrl.pathname}${request.nextUrl.search}`,
